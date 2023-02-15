@@ -1,0 +1,34 @@
+schemaVersion: 2.1.0
+metadata:
+  name: mbk
+components:
+  - name: tools
+    container:
+      image: registry.brb.com.br:5000/devspaces/workspaces/mbk
+      memoryLimit: 512Mi
+      mountSources: true
+      endpoints:
+        - exposure: none
+          name: debug
+          protocol: tcp
+          targetPort: 5005
+        - exposure: public
+          name: 8080-tcp
+          protocol: tcp
+          targetPort: 8080
+      volumeMounts:
+        - name: m2
+          path: /home/user/.m2
+
+  - name: m2
+    volume: {}
+
+  - name: redis
+    container:
+      image: registry.brb.com.br:5000/devspaces/helper/redis:5-alpine
+      memoryLimit: 250Mi
+      endpoints:
+        - exposure: none
+          name: redis
+          protocol: tcp
+          targetPort: 6379
